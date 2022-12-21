@@ -23589,8 +23589,8 @@
     /** @class */
     function () {
       function TooltipMarkupStyleCreator() {
-        this.richTextStyles = {}; // Notice that "generate a style name" usuall happens repeatly when mouse moving and
-        // displaying a tooltip. So we put the `_nextStyleNameId` as a member of each creator
+        this.richTextStyles = {}; // Notice that "generate a style name" usually happens repeatedly when mouse is moving and
+        // a tooltip is displayed. So we put the `_nextStyleNameId` as a member of each creator
         // rather than static shared by all creators (which will cause it increase to fast).
 
         this._nextStyleNameId = getRandomIdBase();
@@ -23695,8 +23695,8 @@
       var inlineName = multipleSeries ? seriesName : itemName;
       return createTooltipMarkup('section', {
         header: seriesName,
-        // When series name not specified, do not show a header line with only '-'.
-        // This case alway happen in tooltip.trigger: 'item'.
+        // When series name is not specified, do not show a header line with only '-'.
+        // This case always happens in tooltip.trigger: 'item'.
         noHeader: multipleSeries || !seriesNameSpecified,
         sortParam: sortParam,
         blocks: [createTooltipMarkup('nameValue', {
@@ -41567,7 +41567,7 @@
         var polyline = this._polyline;
         var polygon = this._polygon;
         var lineGroup = this._lineGroup;
-        var hasAnimation = seriesModel.get('animation');
+        var hasAnimation = !ecModel.ssr && seriesModel.isAnimationEnabled();
         var isAreaChart = !areaStyleModel.isEmpty();
         var valueOrigin = areaStyleModel.get('origin');
         var dataCoordInfo = prepareDataCoordInfo(coordSys, data, valueOrigin);
@@ -41947,8 +41947,8 @@
           seriesDuration = seriesDuration(null);
         }
 
-        var seriesDalay = seriesModel.get('animationDelay') || 0;
-        var seriesDalayValue = isFunction(seriesDalay) ? seriesDalay(null) : seriesDalay;
+        var seriesDelay = seriesModel.get('animationDelay') || 0;
+        var seriesDelayValue = isFunction(seriesDelay) ? seriesDelay(null) : seriesDelay;
         data.eachItemGraphicEl(function (symbol, idx) {
           var el = symbol;
 
@@ -41993,7 +41993,7 @@
               ratio = 1 - ratio;
             }
 
-            var delay = isFunction(seriesDalay) ? seriesDalay(idx) : seriesDuration * ratio + seriesDalayValue;
+            var delay = isFunction(seriesDelay) ? seriesDelay(idx) : seriesDuration * ratio + seriesDelayValue;
             var symbolPath = el.getSymbolPath();
             var text = symbolPath.getTextContent();
             el.attr({
@@ -43479,7 +43479,7 @@
           var sectorShape = sector.shape;
           var animateProperty = isRadial ? 'r' : 'endAngle';
           var animateTarget = {};
-          sectorShape[animateProperty] = isRadial ? 0 : layout.startAngle;
+          sectorShape[animateProperty] = isRadial ? layout.r0 : layout.startAngle;
           animateTarget[animateProperty] = layout[animateProperty];
           (isUpdate ? updateProps : initProps)(sector, {
             shape: animateTarget // __value: typeof dataValue === 'string' ? parseInt(dataValue, 10) : dataValue
@@ -47627,8 +47627,8 @@
 
         var coordSysKey = makeKey(coordSys.model);
         var axesInfoInCoordSys = result.coordSysAxesInfo[coordSysKey] = {};
-        result.coordSysMap[coordSysKey] = coordSys; // Set tooltip (like 'cross') is a convienent way to show axisPointer
-        // for user. So we enable seting tooltip on coordSys model.
+        result.coordSysMap[coordSysKey] = coordSys; // Set tooltip (like 'cross') is a convenient way to show axisPointer
+        // for user. So we enable setting tooltip on coordSys model.
 
         var coordSysModel = coordSys.model;
         var baseTooltipModel = coordSysModel.getModel('tooltip', globalTooltipModel);
@@ -47710,8 +47710,8 @@
       // has value can not be hovered. value/time/log axis default snap if
       // triggered from tooltip and trigger tooltip.
 
-      volatileOption.snap = axis.type !== 'category' && !!triggerTooltip; // Compatibel with previous behavior, tooltip axis do not show label by default.
-      // Only these properties can be overrided from tooltip to axisPointer.
+      volatileOption.snap = axis.type !== 'category' && !!triggerTooltip; // Compatible with previous behavior, tooltip axis does not show label by default.
+      // Only these properties can be overridden from tooltip to axisPointer.
 
       if (tooltipAxisPointerModel.get('type') === 'cross') {
         volatileOption.type = 'line';
@@ -48353,7 +48353,7 @@
 
         this._axisModel = axisModel;
         this._axisPointerModel = axisPointerModel;
-        this._api = api; // Optimize: `render` will be called repeatly during mouse move.
+        this._api = api; // Optimize: `render` will be called repeatedly during mouse move.
         // So it is power consuming if performing `render` each time,
         // especially on mobile device.
 
@@ -48462,7 +48462,7 @@
        */
 
 
-      BaseAxisPointer.prototype.makeElOption = function (elOption, value, axisModel, axisPointerModel, api) {// Shoule be implemenented by sub-class.
+      BaseAxisPointer.prototype.makeElOption = function (elOption, value, axisModel, axisPointerModel, api) {// Should be implemenented by sub-class.
       };
       /**
        * @protected
@@ -48557,7 +48557,7 @@
             cursor: 'move',
             draggable: true,
             onmousemove: function (e) {
-              // Fot mobile devicem, prevent screen slider on the button.
+              // For mobile device, prevent screen slider on the button.
               stop(e.event);
             },
             onmousedown: bind$1(this._onHandleDragMove, this, 0, 0),
@@ -48799,7 +48799,7 @@
           padding: paddings,
           backgroundColor: bgColor
         }),
-        // Lable should be over axisPointer.
+        // Label should be over axisPointer.
         z2: 10
       };
     } // Do not overflow ec container
@@ -49559,8 +49559,8 @@
         });
         return;
       } // In most case only one axis (or event one series is used). It is
-      // convinient to fetch payload.seriesIndex and payload.dataIndex
-      // dirtectly. So put the first seriesIndex and dataIndex of the first
+      // convenient to fetch payload.seriesIndex and payload.dataIndex
+      // directly. So put the first seriesIndex and dataIndex of the first
       // axis on the payload.
 
 
@@ -49581,7 +49581,7 @@
 
     function dispatchHighDownActually(axesInfo, dispatchAction, api) {
       // FIXME
-      // highlight status modification shoule be a stage of main process?
+      // highlight status modification should be a stage of main process?
       // (Consider confilct (e.g., legend and axisPointer) and setOption)
       var zr = api.getZr();
       var highDownKey = 'axisPointerLastHighlights';
@@ -52502,7 +52502,7 @@
 
             features[featureName] = feature;
           } else {
-            feature = features[oldName]; // If feature does not exsit.
+            feature = features[oldName]; // If feature does not exist.
 
             if (!feature) {
               return;
@@ -52547,7 +52547,7 @@
 
         function createIconPaths(featureModel, feature, featureName) {
           var iconStyleModel = featureModel.getModel('iconStyle');
-          var iconStyleEmphasisModel = featureModel.getModel(['emphasis', 'iconStyle']); // If one feature has mutiple icon. they are orginaized as
+          var iconStyleEmphasisModel = featureModel.getModel(['emphasis', 'iconStyle']); // If one feature has multiple icons, they are organized as
           // {
           //     icon: {
           //         foo: '',
@@ -53806,7 +53806,7 @@
 
         function addOrUpdate(newIndex, oldIndex) {
           var newBrushInternal = coverConfigList[newIndex]; // Consider setOption in event listener of brushSelect,
-          // where updating cover when creating should be forbiden.
+          // where updating cover when creating should be forbidden.
 
           if (oldIndex != null && oldCovers[oldIndex] === creatingCover) {
             newCovers[newIndex] = oldCovers[oldIndex];
@@ -54292,7 +54292,7 @@
         var eventParams = updateCoverByMouse(controller, e, localCursorPoint, true);
         controller._dragging = false;
         controller._track = [];
-        controller._creatingCover = null; // trigger event shoule be at final, after procedure will be nested.
+        controller._creatingCover = null; // trigger event should be at final, after procedure will be nested.
 
         eventParams && trigger(controller, eventParams);
       }
@@ -54570,7 +54570,7 @@
           area.range = area.range || []; // convert coordRange to global range and set panelId.
 
           if (targetInfo && targetInfo !== true) {
-            area.panelId = targetInfo.panelId; // (1) area.range shoule always be calculate from coordRange but does
+            area.panelId = targetInfo.panelId; // (1) area.range should always be calculate from coordRange but does
             // not keep its original value, for the sake of the dataZoom scenario,
             // where area.coordRange remains unchanged but area.range may be changed.
             // (2) Only support converting one coordRange to pixel range in brush
@@ -54605,7 +54605,7 @@
       };
       /**
        * If return Object, a coord found.
-       * If reutrn true, global found.
+       * If return true, global found.
        * Otherwise nothing found.
        */
 
@@ -56260,8 +56260,8 @@
         if (cmpt) {
           tooltipModelCascade.push(cmpt);
         } // In most cases, component tooltip formatter has different params with series tooltip formatter,
-        // so that they can not share the same formatter. Since the global tooltip formatter is used for series
-        // by convension, we do not use it as the default formatter for component.
+        // so that they cannot share the same formatter. Since the global tooltip formatter is used for series
+        // by convention, we do not use it as the default formatter for component.
 
 
         tooltipModelCascade.push({
@@ -56542,7 +56542,7 @@
 
       if (gapH != null) {
         // Add extra 2 pixels for this case:
-        // At present the "values" in defaut tooltip are using CSS `float: right`.
+        // At present the "values" in default tooltip are using CSS `float: right`.
         // When the right edge of the tooltip box is on the right side of the
         // viewport, the `float` layout might push the "values" to the second line.
         if (x + width + gapH + 2 > viewWidth) {
@@ -61320,7 +61320,7 @@
           scaleY: otherAxisInverse ? -1 : 1,
           scaleX: 1,
           rotation: Math.PI / 2
-        } // Dont use Math.PI, considering shadow direction.
+        } // Don't use Math.PI, considering shadow direction.
         : {
           scaleY: otherAxisInverse ? -1 : 1,
           scaleX: -1,
@@ -61986,7 +61986,7 @@
       };
 
       SliderZoomView.prototype._findCoordRect = function () {
-        // Find the grid coresponding to the first axis referred by dataZoom.
+        // Find the grid corresponding to the first axis referred by dataZoom.
         var rect;
         var coordSysInfoList = collectReferCoordSysModelInfo(this.dataZoomModel).infoList;
 

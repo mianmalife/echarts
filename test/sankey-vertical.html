@@ -1,4 +1,3 @@
-
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -20,21 +19,19 @@ under the License.
 
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script src="lib/simpleRequire.js"></script>
         <script src="lib/config.js"></script>
         <script src="lib/jquery.min.js"></script>
         <script src="lib/testHelper.js"></script>
-        <link rel="stylesheet" href="lib/reset.css"/>
+        <link rel="stylesheet" href="lib/reset.css" />
     </head>
     <body>
-
         <div id="main"></div>
 
         <script>
-            require(['echarts'], function (echarts) {
-
+            require(["echarts"], function (echarts) {
                 window.onresize = function () {
                     chart.resize();
                 };
@@ -109,114 +106,786 @@ under the License.
                 //     ]
                 // };
 
-                var testData =  {
+                var testData = {
                     nodes: [
                         {
-                            name: 'a',
+                            name: "a",
                             emphasis: {
                                 itemStyle: {
-                                    color: 'yellow',
-                                    opacity: 0.6
-                                }
-                            }
+                                    color: "yellow",
+                                    opacity: 0.6,
+                                },
+                            },
                         },
                         {
-                            name: 'b',
-                            value: 4
+                            name: "b",
+                            value: 4,
                         },
                         {
-                            name: 'a1'
+                            name: "a1",
                         },
                         {
-                            name: 'b1'
+                            name: "b1",
                         },
                         {
-                            name: 'c'
+                            name: "c",
                         },
                         {
-                            name: 'e',
-                            value: 10
-                        }
+                            name: "e",
+                            value: 10,
+                        },
                     ],
                     links: [
                         {
-                            source: 'a',
-                            target: 'a1',
+                            source: "a",
+                            target: "a1",
                             value: 5,
                             emphasis: {
                                 lineStyle: {
-                                    color: 'green',
-                                    opacity: 0.2
-                                }
-                            }
+                                    color: "green",
+                                    opacity: 0.2,
+                                },
+                            },
                         },
                         {
-                            source: 'e',
-                            target: 'b',
-                            value: 3
+                            source: "e",
+                            target: "b",
+                            value: 3,
                         },
                         {
-                            source: 'a',
-                            target: 'b1',
-                            value: 3
+                            source: "a",
+                            target: "b1",
+                            value: 3,
                         },
                         {
-                            source: 'b1',
-                            target: 'a1',
-                            value: 1
+                            source: "b1",
+                            target: "a1",
+                            value: 1,
                         },
                         {
-                            source: 'b1',
-                            target: 'c',
-                            value: 2
+                            source: "b1",
+                            target: "c",
+                            value: 2,
                         },
                         {
-                            source: 'b',
-                            target: 'c',
-                            value: 1
-                        }
-                    ]
+                            source: "b",
+                            target: "c",
+                            value: 1,
+                        },
+                    ],
                 };
 
                 var option = {
-                    color: ['#67001f', '#b2182b', '#d6604d', '#f4a582', '#fddbc7', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'],
+                    color: [
+                        "#67001f",
+                        "#b2182b",
+                        "#d6604d",
+                        "#f4a582",
+                        "#fddbc7",
+                        "#d1e5f0",
+                        "#92c5de",
+                        "#4393c3",
+                        "#2166ac",
+                        "#053061",
+                    ],
                     tooltip: {
-                        trigger: 'item',
-                        triggerOn: 'mousemove',
+                        trigger: "item",
+                        triggerOn: "mousemove",
                         formatter: function (params) {
-                            return params.name + ': ' + params.value;
-                        }
+                            return params.name + ": " + params.value;
+                        },
                     },
                     animation: false,
                     series: [
                         {
-                            type: 'sankey',
-                            bottom: '10%',
-                            focusNodeAdjacency: 'allEdges',
-                            data: testData.nodes,
-                            links: testData.links,
-                            orient: 'vertical',
+                            type: "sankey",
+                            nodeGroup: 2,
+                            nodeAlign: 'justify',
+                            layoutIterations: 0,
+                            bottom: "10%",
+                            left: "15%",
+                            right: "4%",
+                            data: [
+                                {
+                                    group: 1,
+                                    depth: 0,
+                                    name: "进店%1001",
+                                    value: 309,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 1,
+                                    name: "ipad%2001",
+                                    value: 30,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 1,
+                                    name: "MyCoach%2002",
+                                    value: 29,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 1,
+                                    name: "Cash Desk%2003",
+                                    value: 20,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 1,
+                                    name: "MacBook%2004",
+                                    value: 15,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 1,
+                                    name: "3PP%2005",
+                                    value: 13,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 2,
+                                    name: "MyCoach%3001",
+                                    value: 18,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 2,
+                                    name: "1PP-others%3002",
+                                    value: 5,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 2,
+                                    name: "1PP-Protection%3003",
+                                    value: 5,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 2,
+                                    name: "3PP%3004",
+                                    value: 5,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 2,
+                                    name: "MacBook%3005",
+                                    value: 4,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 3,
+                                    name: "3PP%4001",
+                                    value: 7,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 3,
+                                    name: "MyCoach%4002",
+                                    value: 7,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 3,
+                                    name: "Cash Desk%4003",
+                                    value: 6,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 3,
+                                    name: "MacBook%4004",
+                                    value: 5,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 3,
+                                    name: "正门门区%4005",
+                                    value: 2,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 4,
+                                    name: "MyCoach%5001",
+                                    value: 8,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 4,
+                                    name: "MacBook%5002",
+                                    value: 4,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 4,
+                                    name: "3PP%5003",
+                                    value: 2,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 4,
+                                    name: "1PP-Protection%5004",
+                                    value: 1,
+                                },
+                                {
+                                    group: 1,
+                                    depth: 4,
+                                    name: "Trade-in%5005",
+                                    value: 1,
+                                },
+                                {
+                                    group: 2,
+                                    depth: 1,
+                                    name: "离店%1001",
+                                    value: 28,
+                                },
+                                {
+                                    group: 2,
+                                    depth: 2,
+                                    name: "离店%2001",
+                                    value: 25,
+                                },
+                                {
+                                    group: 2,
+                                    depth: 3,
+                                    name: "离店%3001",
+                                    value: 11,
+                                },
+                                {
+                                    group: 2,
+                                    depth: 4,
+                                    name: "离店%4001",
+                                    value: 16,
+                                },
+                            ],
+                            links: [
+                                {
+                                    groupId: 1,
+                                    depth: 0,
+                                    value: 76,
+                                    source: "进店%1001",
+                                    target: "MyCoach%2002",
+                                    rate: 24.6,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 0,
+                                    value: 62,
+                                    source: "进店%1001",
+                                    target: "3PP%2005",
+                                    rate: 20.06,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 0,
+                                    value: 54,
+                                    source: "进店%1001",
+                                    target: "Cash Desk%2003",
+                                    rate: 17.48,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 0,
+                                    value: 42,
+                                    source: "进店%1001",
+                                    target: "ipad%2001",
+                                    rate: 13.59,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 0,
+                                    value: 30,
+                                    source: "进店%1001",
+                                    target: "MacBook%2004",
+                                    rate: 9.71,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 13,
+                                    source: "ipad%2001",
+                                    target: "MyCoach%3001",
+                                    rate: 43.33,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 9,
+                                    source: "MyCoach%2002",
+                                    target: "1PP-others%3002",
+                                    rate: 31.03,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 6,
+                                    source: "MacBook%2004",
+                                    target: "3PP%3004",
+                                    rate: 40,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 5,
+                                    source: "ipad%2001",
+                                    target: "3PP%3004",
+                                    rate: 16.67,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 4,
+                                    source: "Cash Desk%2003",
+                                    target: "MacBook%3005",
+                                    rate: 20,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 4,
+                                    source: "3PP%2005",
+                                    target: "MyCoach%3001",
+                                    rate: 30.77,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 3,
+                                    source: "Cash Desk%2003",
+                                    target: "MyCoach%3001",
+                                    rate: 15,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 3,
+                                    source: "ipad%2001",
+                                    target: "MacBook%3005",
+                                    rate: 10,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 2,
+                                    source: "Cash Desk%2003",
+                                    target: "3PP%3004",
+                                    rate: 10,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 2,
+                                    source: "ipad%2001",
+                                    target: "1PP-Protection%3003",
+                                    rate: 6.67,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "ipad%2001",
+                                    target: "1PP-others%3002",
+                                    rate: 3.33,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "MacBook%2004",
+                                    target: "MyCoach%3001",
+                                    rate: 6.67,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "Cash Desk%2003",
+                                    target: "1PP-others%3002",
+                                    rate: 5,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "Cash Desk%2003",
+                                    target: "1PP-Protection%3003",
+                                    rate: 5,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "3PP%2005",
+                                    target: "MacBook%3005",
+                                    rate: 7.69,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "MyCoach%2002",
+                                    target: "1PP-Protection%3003",
+                                    rate: 3.45,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 1,
+                                    value: 1,
+                                    source: "MyCoach%2002",
+                                    target: "3PP%3004",
+                                    rate: 3.45,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 3,
+                                    source: "1PP-Protection%3003",
+                                    target: "3PP%4001",
+                                    rate: 60,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 2,
+                                    source: "3PP%3004",
+                                    target: "Cash Desk%4003",
+                                    rate: 40,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 2,
+                                    source: "3PP%3004",
+                                    target: "MyCoach%4002",
+                                    rate: 40,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "MacBook%3005",
+                                    target: "3PP%4001",
+                                    rate: 25,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "MacBook%3005",
+                                    target: "Cash Desk%4003",
+                                    rate: 25,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "MyCoach%3001",
+                                    target: "3PP%4001",
+                                    rate: 5.56,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "MyCoach%3001",
+                                    target: "Cash Desk%4003",
+                                    rate: 5.56,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "1PP-others%3002",
+                                    target: "MyCoach%4002",
+                                    rate: 20,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "1PP-others%3002",
+                                    target: "正门门区%4005",
+                                    rate: 20,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 3,
+                                    value: 1,
+                                    source: "3PP%4001",
+                                    target: "MacBook%5002",
+                                    rate: 14.29,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 3,
+                                    value: 1,
+                                    source: "Cash Desk%4003",
+                                    target: "3PP%5003",
+                                    rate: 16.67,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 3,
+                                    value: 1,
+                                    source: "Cash Desk%4003",
+                                    target: "MyCoach%5001",
+                                    rate: 16.67,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 3,
+                                    value: 1,
+                                    source: "MacBook%4004",
+                                    target: "1PP-Protection%5004",
+                                    rate: 20,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 3,
+                                    value: 1,
+                                    source: "MyCoach%4002",
+                                    target: "3PP%5003",
+                                    rate: 14.29,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 1,
+                                    depth: 3,
+                                    value: 1,
+                                    source: "MyCoach%4002",
+                                    target: "Trade-in%5005",
+                                    rate: 14.29,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 0,
+                                    value: 28,
+                                    source: "进店%1001",
+                                    target: "离店%1001",
+                                    rate: 9.06,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 1,
+                                    value: 8,
+                                    source: "Cash Desk%2003",
+                                    target: "离店%2001",
+                                    rate: 40,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 1,
+                                    value: 6,
+                                    source: "MacBook%2004",
+                                    target: "离店%2001",
+                                    rate: 40,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 1,
+                                    value: 6,
+                                    source: "3PP%2005",
+                                    target: "离店%2001",
+                                    rate: 46.15,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 1,
+                                    value: 5,
+                                    source: "MyCoach%2002",
+                                    target: "离店%2001",
+                                    rate: 17.24,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 2,
+                                    value: 4,
+                                    source: "MyCoach%3001",
+                                    target: "离店%3001",
+                                    rate: 22.22,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 2,
+                                    value: 2,
+                                    source: "1PP-Protection%3003",
+                                    target: "离店%3001",
+                                    rate: 40,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 2,
+                                    value: 2,
+                                    source: "MacBook%3005",
+                                    target: "离店%3001",
+                                    rate: 50,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 2,
+                                    value: 1,
+                                    source: "3PP%3004",
+                                    target: "离店%3001",
+                                    rate: 20,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 3,
+                                    value: 5,
+                                    source: "3PP%4001",
+                                    target: "离店%4001",
+                                    rate: 71.43,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 3,
+                                    value: 4,
+                                    source: "Cash Desk%4003",
+                                    target: "离店%4001",
+                                    rate: 66.67,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 3,
+                                    value: 3,
+                                    source: "MacBook%4004",
+                                    target: "离店%4001",
+                                    rate: 60,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                                {
+                                    groupId: 2,
+                                    depth: 3,
+                                    value: 3,
+                                    source: "MyCoach%4002",
+                                    target: "离店%4001",
+                                    rate: 42.86,
+                                    siteSourceParent: "",
+                                    siteTargetParent: "",
+                                },
+                            ],
+                            orient: "vertical",
                             label: {
-                                position: 'top'
+                                position: ['0%', '180%'],
+                                borderColor: '#1f77b4',
+                                verticalAlign: 'bottom',
+                                rotate: -40,
+                                formatter: (p) => {
+                                return p.name.split('%')[0]
+                                }
                             },
                             lineStyle: {
-                                normal: {
-                                    color: 'source'
-                                }
+                                color: 'source',
+                                curveness: 0.5
                             }
-                        }
-                    ]
+                        },
+                    ],
                 };
 
-                var chart = testHelper.create(echarts, 'main' , {
+                var chart = testHelper.create(echarts, "main", {
                     title: [
                         "1. when hover on node 'a1' the edge 'a1-a' is green with opacity 0.2 and the node 'a' is yellow with opacity 0.6.",
                         "2. when hover on edge 'a1-a' the color is green with opacity 0.2 and the node 'a' is yellow with opacity 0.6.",
                         "3. when hover on node 'a' the color is yellow with opacity 0.6 and the edge 'a1-a' is green with opacity 0.2.",
-                        "4. node 'e' and node 'b''s value is customized which is longer than the max sum of inEdges or outEdges."
+                        "4. node 'e' and node 'b''s value is customized which is longer than the max sum of inEdges or outEdges.",
                     ],
                     option: option,
-                    height: 700
+                    height: 700,
                 });
             });
         </script>

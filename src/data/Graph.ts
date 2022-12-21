@@ -320,6 +320,8 @@ class GraphNode {
 
     id: string;
 
+    group: number;
+
     inEdges: GraphEdge[] = [];
 
     outEdges: GraphEdge[] = [];

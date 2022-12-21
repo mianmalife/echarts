@@ -23918,8 +23918,8 @@
     /** @class */
     function () {
       function TooltipMarkupStyleCreator() {
-        this.richTextStyles = {}; // Notice that "generate a style name" usuall happens repeatly when mouse moving and
-        // displaying a tooltip. So we put the `_nextStyleNameId` as a member of each creator
+        this.richTextStyles = {}; // Notice that "generate a style name" usually happens repeatedly when mouse is moving and
+        // a tooltip is displayed. So we put the `_nextStyleNameId` as a member of each creator
         // rather than static shared by all creators (which will cause it increase to fast).
 
         this._nextStyleNameId = getRandomIdBase();
@@ -24024,8 +24024,8 @@
       var inlineName = multipleSeries ? seriesName : itemName;
       return createTooltipMarkup('section', {
         header: seriesName,
-        // When series name not specified, do not show a header line with only '-'.
-        // This case alway happen in tooltip.trigger: 'item'.
+        // When series name is not specified, do not show a header line with only '-'.
+        // This case always happens in tooltip.trigger: 'item'.
         noHeader: multipleSeries || !seriesNameSpecified,
         sortParam: sortParam,
         blocks: [createTooltipMarkup('nameValue', {
@@ -42720,7 +42720,7 @@
         var polyline = this._polyline;
         var polygon = this._polygon;
         var lineGroup = this._lineGroup;
-        var hasAnimation = seriesModel.get('animation');
+        var hasAnimation = !ecModel.ssr && seriesModel.isAnimationEnabled();
         var isAreaChart = !areaStyleModel.isEmpty();
         var valueOrigin = areaStyleModel.get('origin');
         var dataCoordInfo = prepareDataCoordInfo(coordSys, data, valueOrigin);
@@ -43100,8 +43100,8 @@
           seriesDuration = seriesDuration(null);
         }
 
-        var seriesDalay = seriesModel.get('animationDelay') || 0;
-        var seriesDalayValue = isFunction(seriesDalay) ? seriesDalay(null) : seriesDalay;
+        var seriesDelay = seriesModel.get('animationDelay') || 0;
+        var seriesDelayValue = isFunction(seriesDelay) ? seriesDelay(null) : seriesDelay;
         data.eachItemGraphicEl(function (symbol, idx) {
           var el = symbol;
 
@@ -43146,7 +43146,7 @@
               ratio = 1 - ratio;
             }
 
-            var delay = isFunction(seriesDalay) ? seriesDalay(idx) : seriesDuration * ratio + seriesDalayValue;
+            var delay = isFunction(seriesDelay) ? seriesDelay(idx) : seriesDuration * ratio + seriesDelayValue;
             var symbolPath = el.getSymbolPath();
             var text = symbolPath.getTextContent();
             el.attr({
@@ -44632,7 +44632,7 @@
           var sectorShape = sector.shape;
           var animateProperty = isRadial ? 'r' : 'endAngle';
           var animateTarget = {};
-          sectorShape[animateProperty] = isRadial ? 0 : layout.startAngle;
+          sectorShape[animateProperty] = isRadial ? layout.r0 : layout.startAngle;
           animateTarget[animateProperty] = layout[animateProperty];
           (isUpdate ? updateProps : initProps)(sector, {
             shape: animateTarget // __value: typeof dataValue === 'string' ? parseInt(dataValue, 10) : dataValue
@@ -48780,8 +48780,8 @@
 
         var coordSysKey = makeKey(coordSys.model);
         var axesInfoInCoordSys = result.coordSysAxesInfo[coordSysKey] = {};
-        result.coordSysMap[coordSysKey] = coordSys; // Set tooltip (like 'cross') is a convienent way to show axisPointer
-        // for user. So we enable seting tooltip on coordSys model.
+        result.coordSysMap[coordSysKey] = coordSys; // Set tooltip (like 'cross') is a convenient way to show axisPointer
+        // for user. So we enable setting tooltip on coordSys model.
 
         var coordSysModel = coordSys.model;
         var baseTooltipModel = coordSysModel.getModel('tooltip', globalTooltipModel);
@@ -48863,8 +48863,8 @@
       // has value can not be hovered. value/time/log axis default snap if
       // triggered from tooltip and trigger tooltip.
 
-      volatileOption.snap = axis.type !== 'category' && !!triggerTooltip; // Compatibel with previous behavior, tooltip axis do not show label by default.
-      // Only these properties can be overrided from tooltip to axisPointer.
+      volatileOption.snap = axis.type !== 'category' && !!triggerTooltip; // Compatible with previous behavior, tooltip axis does not show label by default.
+      // Only these properties can be overridden from tooltip to axisPointer.
 
       if (tooltipAxisPointerModel.get('type') === 'cross') {
         volatileOption.type = 'line';
@@ -52353,10 +52353,10 @@
 
       MapDraw.prototype._enableBlurEntireSVG = function (focusSelf, viewBuildCtx) {
         // It's a little complicated to support blurring the entire geoSVG in series-map.
-        // So do not suport it until some requirements come.
+        // So do not support it until some requirements come.
         // At present, in series-map, only regions can be blurred.
         if (focusSelf && viewBuildCtx.isGeo) {
-          var blurStyle = viewBuildCtx.mapOrGeoModel.getModel(['blur', 'itemStyle']).getItemStyle(); // Only suport `opacity` here. Because not sure that other props are suitable for
+          var blurStyle = viewBuildCtx.mapOrGeoModel.getModel(['blur', 'itemStyle']).getItemStyle(); // Only support `opacity` here. Because not sure that other props are suitable for
           // all of the elements generated by SVG (especially for Text/TSpan/Image/... ).
 
           var opacity_1 = blurStyle.opacity;
@@ -52550,12 +52550,12 @@
       // polyline and polygon is "open" or "close" but not fill or not).
       // (2) For the common props like opacity, if some use itemStyle
       // and some use `lineStyle`, it might confuse users.
-      // (3) Most SVG use <path>, where can not detect wether draw a "line"
+      // (3) Most SVG use <path>, where can not detect whether to draw a "line"
       // or a filled shape, so use `itemStyle` for <path>.
       var normalStyleModel = regionModel.getModel('itemStyle');
       var emphasisStyleModel = regionModel.getModel(['emphasis', 'itemStyle']);
       var blurStyleModel = regionModel.getModel(['blur', 'itemStyle']);
-      var selectStyleModel = regionModel.getModel(['select', 'itemStyle']); // NOTE: DONT use 'style' in visual when drawing map.
+      var selectStyleModel = regionModel.getModel(['select', 'itemStyle']); // NOTE: DON'T use 'style' in visual when drawing map.
       // This component is used for drawing underlying map for both geo component and map series.
 
       var normalStyle = getFixedItemStyle(normalStyleModel);
@@ -64709,7 +64709,7 @@
 
         function addOrUpdate(newIndex, oldIndex) {
           var newBrushInternal = coverConfigList[newIndex]; // Consider setOption in event listener of brushSelect,
-          // where updating cover when creating should be forbiden.
+          // where updating cover when creating should be forbidden.
 
           if (oldIndex != null && oldCovers[oldIndex] === creatingCover) {
             newCovers[newIndex] = oldCovers[oldIndex];
@@ -65195,7 +65195,7 @@
         var eventParams = updateCoverByMouse(controller, e, localCursorPoint, true);
         controller._dragging = false;
         controller._track = [];
-        controller._creatingCover = null; // trigger event shoule be at final, after procedure will be nested.
+        controller._creatingCover = null; // trigger event should be at final, after procedure will be nested.
 
         eventParams && trigger$1(controller, eventParams);
       }
@@ -66068,6 +66068,8 @@
       ecModel.eachSeriesByType('sankey', function (seriesModel) {
         var nodeWidth = seriesModel.get('nodeWidth');
         var nodeGap = seriesModel.get('nodeGap');
+        var nodeGroup = seriesModel.get("nodeGroup") || 0;
+        var datas = seriesModel.get("data") || [];
         var layoutInfo = getViewRect$4(seriesModel, api);
         seriesModel.layoutInfo = layoutInfo;
         var width = layoutInfo.width;
@@ -66075,14 +66077,14 @@
         var graph = seriesModel.getGraph();
         var nodes = graph.nodes;
         var edges = graph.edges;
-        computeNodeValues(nodes);
+        computeNodeValues(nodes, datas);
         var filteredNodes = filter(nodes, function (node) {
           return node.getLayout().value === 0;
         });
         var iterations = filteredNodes.length !== 0 ? 0 : seriesModel.get('layoutIterations');
         var orient = seriesModel.get('orient');
         var nodeAlign = seriesModel.get('nodeAlign');
-        layoutSankey(nodes, edges, nodeWidth, nodeGap, width, height, iterations, orient, nodeAlign);
+        layoutSankey(nodes, edges, nodeWidth, nodeGap, width, height, iterations, orient, nodeAlign, nodeGroup);
       });
     }
     /**
@@ -66096,9 +66098,9 @@
       });
     }
 
-    function layoutSankey(nodes, edges, nodeWidth, nodeGap, width, height, iterations, orient, nodeAlign) {
+    function layoutSankey(nodes, edges, nodeWidth, nodeGap, width, height, iterations, orient, nodeAlign, nodeGroup) {
       computeNodeBreadths(nodes, edges, nodeWidth, width, height, orient, nodeAlign);
-      computeNodeDepths(nodes, edges, height, width, nodeGap, iterations, orient);
+      computeNodeDepths(nodes, edges, height, width, nodeGap, iterations, orient, nodeGroup);
       computeEdgeDepths(nodes, orient);
     }
     /**
@@ -66106,12 +66108,19 @@
      */
 
 
-    function computeNodeValues(nodes) {
+    function computeNodeValues(nodes, datas) {
       each(nodes, function (node) {
         var value1 = sum(node.outEdges, getEdgeValue);
         var value2 = sum(node.inEdges, getEdgeValue);
         var nodeRawValue = node.getValue() || 0;
         var value = Math.max(value1, value2, nodeRawValue);
+
+        for (var i = 0; i < datas.length; i++) {
+          if (datas[i].name === node.id) {
+            node.group = datas[i].group;
+          }
+        }
+
         node.setLayout({
           value: value
         }, true);
@@ -66296,19 +66305,19 @@
      */
 
 
-    function computeNodeDepths(nodes, edges, height, width, nodeGap, iterations, orient) {
+    function computeNodeDepths(nodes, edges, height, width, nodeGap, iterations, orient, nodeGroup) {
       var nodesByBreadth = prepareNodesByBreadth(nodes, orient);
-      initializeNodeDepth(nodesByBreadth, edges, height, width, nodeGap, orient);
-      resolveCollisions(nodesByBreadth, nodeGap, height, width, orient);
+      initializeNodeDepth(nodesByBreadth, edges, height, width, nodeGap, orient, nodeGroup);
+      resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup);
 
       for (var alpha = 1; iterations > 0; iterations--) {
         // 0.99 is a experience parameter, ensure that each iterations of
         // changes as small as possible.
         alpha *= 0.99;
         relaxRightToLeft(nodesByBreadth, alpha, orient);
-        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient);
+        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup);
         relaxLeftToRight(nodesByBreadth, alpha, orient);
-        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient);
+        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup);
       }
     }
 
@@ -66331,7 +66340,7 @@
      */
 
 
-    function initializeNodeDepth(nodesByBreadth, edges, height, width, nodeGap, orient) {
+    function initializeNodeDepth(nodesByBreadth, edges, height, width, nodeGap, orient, nodeGroup) {
       var minKy = Infinity;
       each(nodesByBreadth, function (nodes) {
         var n = nodes.length;
@@ -66339,6 +66348,11 @@
         each(nodes, function (node) {
           sum += node.getLayout().value;
         });
+
+        if (nodeGroup && nodeGroup > 0) {
+          sum *= nodeGroup;
+        }
+
         var ky = orient === 'vertical' ? (width - (n - 1) * nodeGap) / sum : (height - (n - 1) * nodeGap) / sum;
 
         if (ky < minKy) {
@@ -66378,7 +66392,7 @@
      */
 
 
-    function resolveCollisions(nodesByBreadth, nodeGap, height, width, orient) {
+    function resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup) {
       var keyAttr = orient === 'vertical' ? 'x' : 'y';
       each(nodesByBreadth, function (nodes) {
         nodes.sort(function (a, b) {
@@ -66396,7 +66410,7 @@
           dy = y0 - node.getLayout()[keyAttr];
 
           if (dy > 0) {
-            nodeX = node.getLayout()[keyAttr] + dy;
+            nodeX = node.group === 1 ? node.getLayout()[keyAttr] + dy : width * ((node.group - 1) / nodeGroup) + 60;
             orient === 'vertical' ? node.setLayout({
               x: nodeX
             }, true) : node.setLayout({
@@ -71317,7 +71331,7 @@
         if (firstCreate) {
           sector.setShape(sectorShape);
           sector.shape.r = layout.r0;
-          updateProps(sector, {
+          initProps(sector, {
             shape: {
               r: layout.r
             }
@@ -74274,7 +74288,7 @@
 
         this._axisModel = axisModel;
         this._axisPointerModel = axisPointerModel;
-        this._api = api; // Optimize: `render` will be called repeatly during mouse move.
+        this._api = api; // Optimize: `render` will be called repeatedly during mouse move.
         // So it is power consuming if performing `render` each time,
         // especially on mobile device.
 
@@ -74383,7 +74397,7 @@
        */
 
 
-      BaseAxisPointer.prototype.makeElOption = function (elOption, value, axisModel, axisPointerModel, api) {// Shoule be implemenented by sub-class.
+      BaseAxisPointer.prototype.makeElOption = function (elOption, value, axisModel, axisPointerModel, api) {// Should be implemenented by sub-class.
       };
       /**
        * @protected
@@ -74478,7 +74492,7 @@
             cursor: 'move',
             draggable: true,
             onmousemove: function (e) {
-              // Fot mobile devicem, prevent screen slider on the button.
+              // For mobile device, prevent screen slider on the button.
               stop(e.event);
             },
             onmousedown: bind$1(this._onHandleDragMove, this, 0, 0),
@@ -74720,7 +74734,7 @@
           padding: paddings,
           backgroundColor: bgColor
         }),
-        // Lable should be over axisPointer.
+        // Label should be over axisPointer.
         z2: 10
       };
     } // Do not overflow ec container
@@ -75491,8 +75505,8 @@
         });
         return;
       } // In most case only one axis (or event one series is used). It is
-      // convinient to fetch payload.seriesIndex and payload.dataIndex
-      // dirtectly. So put the first seriesIndex and dataIndex of the first
+      // convenient to fetch payload.seriesIndex and payload.dataIndex
+      // directly. So put the first seriesIndex and dataIndex of the first
       // axis on the payload.
 
 
@@ -75513,7 +75527,7 @@
 
     function dispatchHighDownActually(axesInfo, dispatchAction, api) {
       // FIXME
-      // highlight status modification shoule be a stage of main process?
+      // highlight status modification should be a stage of main process?
       // (Consider confilct (e.g., legend and axisPointer) and setOption)
       var zr = api.getZr();
       var highDownKey = 'axisPointerLastHighlights';
@@ -80489,7 +80503,7 @@
 
             features[featureName] = feature;
           } else {
-            feature = features[oldName]; // If feature does not exsit.
+            feature = features[oldName]; // If feature does not exist.
 
             if (!feature) {
               return;
@@ -80534,7 +80548,7 @@
 
         function createIconPaths(featureModel, feature, featureName) {
           var iconStyleModel = featureModel.getModel('iconStyle');
-          var iconStyleEmphasisModel = featureModel.getModel(['emphasis', 'iconStyle']); // If one feature has mutiple icon. they are orginaized as
+          var iconStyleEmphasisModel = featureModel.getModel(['emphasis', 'iconStyle']); // If one feature has multiple icons, they are organized as
           // {
           //     icon: {
           //         foo: '',
@@ -81643,7 +81657,7 @@
           area.range = area.range || []; // convert coordRange to global range and set panelId.
 
           if (targetInfo && targetInfo !== true) {
-            area.panelId = targetInfo.panelId; // (1) area.range shoule always be calculate from coordRange but does
+            area.panelId = targetInfo.panelId; // (1) area.range should always be calculate from coordRange but does
             // not keep its original value, for the sake of the dataZoom scenario,
             // where area.coordRange remains unchanged but area.range may be changed.
             // (2) Only support converting one coordRange to pixel range in brush
@@ -81678,7 +81692,7 @@
       };
       /**
        * If return Object, a coord found.
-       * If reutrn true, global found.
+       * If return true, global found.
        * Otherwise nothing found.
        */
 
@@ -83333,8 +83347,8 @@
         if (cmpt) {
           tooltipModelCascade.push(cmpt);
         } // In most cases, component tooltip formatter has different params with series tooltip formatter,
-        // so that they can not share the same formatter. Since the global tooltip formatter is used for series
-        // by convension, we do not use it as the default formatter for component.
+        // so that they cannot share the same formatter. Since the global tooltip formatter is used for series
+        // by convention, we do not use it as the default formatter for component.
 
 
         tooltipModelCascade.push({
@@ -83615,7 +83629,7 @@
 
       if (gapH != null) {
         // Add extra 2 pixels for this case:
-        // At present the "values" in defaut tooltip are using CSS `float: right`.
+        // At present the "values" in default tooltip are using CSS `float: right`.
         // When the right edge of the tooltip box is on the right side of the
         // viewport, the `float` layout might push the "values" to the second line.
         if (x + width + gapH + 2 > viewWidth) {
@@ -89564,7 +89578,7 @@
           scaleY: otherAxisInverse ? -1 : 1,
           scaleX: 1,
           rotation: Math.PI / 2
-        } // Dont use Math.PI, considering shadow direction.
+        } // Don't use Math.PI, considering shadow direction.
         : {
           scaleY: otherAxisInverse ? -1 : 1,
           scaleX: -1,
@@ -90230,7 +90244,7 @@
       };
 
       SliderZoomView.prototype._findCoordRect = function () {
-        // Find the grid coresponding to the first axis referred by dataZoom.
+        // Find the grid corresponding to the first axis referred by dataZoom.
         var rect;
         var coordSysInfoList = collectReferCoordSysModelInfo(this.dataZoomModel).infoList;
 
@@ -90512,7 +90526,7 @@
        * PENDING:
        * delete this method if no outer usage.
        *
-       * Return  Concrete dimention. If return null/undefined, no dimension used.
+       * Return  Concrete dimension. If null/undefined is returned, no dimension is used.
        */
       // getDataDimension(data: SeriesData) {
       //     const optDim = this.option.dimension;
@@ -90584,7 +90598,7 @@
             base.inRange = {
               color: thisOption.color.slice().reverse()
             };
-          } // Compatible with previous logic, always give a defautl color, otherwise
+          } // Compatible with previous logic, always give a default color, otherwise
           // simple config with no inRange and outOfRange will not work.
           // Originally we use visualMap.color as the default color, but setOption at
           // the second time the default color will be erased. So we change to use
@@ -90804,7 +90818,7 @@
         var range = this.option.range;
 
         if (!range || range.auto) {
-          // `range` should always be array (so we dont use other
+          // `range` should always be array (so we don't use other
           // value like 'auto') for user-friend. (consider getOption).
           dataExtent.auto = 1;
           this.option.range = dataExtent;
@@ -91357,7 +91371,7 @@
           draggable: true,
           drift: onDrift,
           onmousemove: function (e) {
-            // Fot mobile devicem, prevent screen slider on the button.
+            // For mobile device, prevent screen slider on the button.
             stop(e.event);
           },
           ondragend: onDragEnd,
@@ -91485,7 +91499,7 @@
         var visualMapModel = this.visualMapModel;
         var handleEnds = this._handleEnds;
         var sizeExtent = [0, visualMapModel.itemSize[1]];
-        sliderMove(delta, handleEnds, sizeExtent, handleIndex, // cross is forbiden
+        sliderMove(delta, handleEnds, sizeExtent, handleIndex, // cross is forbidden
         0);
         var dataExtent = visualMapModel.getExtent(); // Update data interval.
 
@@ -91536,7 +91550,7 @@
 
       ContinuousView.prototype._makeColorGradient = function (dataInterval, opts) {
         // Considering colorHue, which is not linear, so we have to sample
-        // to calculate gradient color stops, but not only caculate head
+        // to calculate gradient color stops, but not only calculate head
         // and tail.
         var sampleNumber = 100; // Arbitrary value.
 
@@ -91898,7 +91912,7 @@
         cursor: cursor,
         drift: onDrift,
         onmousemove: function (e) {
-          // Fot mobile devicem, prevent screen slider on the button.
+          // For mobile device, prevent screen slider on the button.
           stop(e.event);
         },
         ondragend: onDragEnd
@@ -92514,7 +92528,7 @@
             item.close = [1, 1];
           } else {
             // `min` `max` is legacy option.
-            // `lt` `gt` `lte` `gte` is recommanded.
+            // `lt` `gt` `lte` `gte` is recommended.
             var interval = item.interval = [];
             var close_1 = item.close = [0, 0];
             var closeList = [1, 0, 1];

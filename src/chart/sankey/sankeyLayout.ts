@@ -33,6 +33,9 @@ export default function sankeyLayout(ecModel: GlobalModel, api: ExtensionAPI) {
         const nodeWidth = seriesModel.get('nodeWidth');
         const nodeGap = seriesModel.get('nodeGap');
 
+        const nodeGroup = seriesModel.get('nodeGroup') || 0;
+        const datas = seriesModel.get('data') || [];
+
         const layoutInfo = getViewRect(seriesModel, api);
 
         seriesModel.layoutInfo = layoutInfo;
@@ -45,7 +48,7 @@ export default function sankeyLayout(ecModel: GlobalModel, api: ExtensionAPI) {
         const nodes = graph.nodes;
         const edges = graph.edges;
 
-        computeNodeValues(nodes);
+        computeNodeValues(nodes, datas);
 
         const filteredNodes = zrUtil.filter(nodes, function (node) {
             return node.getLayout().value === 0;
@@ -57,7 +60,7 @@ export default function sankeyLayout(ecModel: GlobalModel, api: ExtensionAPI) {
 
         const nodeAlign = seriesModel.get('nodeAlign');
 
-        layoutSankey(nodes, edges, nodeWidth, nodeGap, width, height, iterations, orient, nodeAlign);
+        layoutSankey(nodes, edges, nodeWidth, nodeGap, width, height, iterations, orient, nodeAlign, nodeGroup);
     });
 }
 
@@ -82,22 +85,28 @@ function layoutSankey(
     height: number,
     iterations: number,
     orient: LayoutOrient,
-    nodeAlign: SankeySeriesOption['nodeAlign']
+    nodeAlign: SankeySeriesOption['nodeAlign'],
+    nodeGroup: number
 ) {
     computeNodeBreadths(nodes, edges, nodeWidth, width, height, orient, nodeAlign);
-    computeNodeDepths(nodes, edges, height, width, nodeGap, iterations, orient);
+    computeNodeDepths(nodes, edges, height, width, nodeGap, iterations, orient, nodeGroup);
     computeEdgeDepths(nodes, orient);
 }
 
 /**
  * Compute the value of each node by summing the associated edge's value
  */
-function computeNodeValues(nodes: GraphNode[]) {
+function computeNodeValues(nodes: GraphNode[], datas: any) {
     zrUtil.each(nodes, function (node) {
         const value1 = sum(node.outEdges, getEdgeValue);
         const value2 = sum(node.inEdges, getEdgeValue);
         const nodeRawValue = node.getValue() as number || 0;
         const value = Math.max(value1, value2, nodeRawValue);
+        for (let i = 0; i < datas.length; i++) {
+            if (datas[i].name === node.id) {
+                node.group = datas[i].group;
+            }
+        }
         node.setLayout({value: value}, true);
     });
 }
@@ -276,21 +285,22 @@ function computeNodeDepths(
     width: number,
     nodeGap: number,
     iterations: number,
-    orient: LayoutOrient
+    orient: LayoutOrient,
+    nodeGroup: number
 ) {
     const nodesByBreadth = prepareNodesByBreadth(nodes, orient);
 
-    initializeNodeDepth(nodesByBreadth, edges, height, width, nodeGap, orient);
-    resolveCollisions(nodesByBreadth, nodeGap, height, width, orient);
+    initializeNodeDepth(nodesByBreadth, edges, height, width, nodeGap, orient, nodeGroup);
+    resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup);
 
     for (let alpha = 1; iterations > 0; iterations--) {
         // 0.99 is a experience parameter, ensure that each iterations of
         // changes as small as possible.
         alpha *= 0.99;
         relaxRightToLeft(nodesByBreadth, alpha, orient);
-        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient);
+        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup);
         relaxLeftToRight(nodesByBreadth, alpha, orient);
-        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient);
+        resolveCollisions(nodesByBreadth, nodeGap, height, width, orient, nodeGroup);
     }
 }
 
@@ -320,7 +330,8 @@ function initializeNodeDepth(
     height: number,
     width: number,
     nodeGap: number,
-    orient: LayoutOrient
+    orient: LayoutOrient,
+    nodeGroup: number
 ) {
     let minKy = Infinity;
     zrUtil.each(nodesByBreadth, function (nodes) {
@@ -329,6 +340,9 @@ function initializeNodeDepth(
         zrUtil.each(nodes, function (node) {
             sum += node.getLayout().value;
         });
+        if (nodeGroup && nodeGroup > 0) {
+            sum *= nodeGroup;
+        }
         const ky = orient === 'vertical'
                     ? (width - (n - 1) * nodeGap) / sum
                     : (height - (n - 1) * nodeGap) / sum;
@@ -366,7 +380,8 @@ function resolveCollisions(
     nodeGap: number,
     height: number,
     width: number,
-    orient: LayoutOrient
+    orient: LayoutOrient,
+    nodeGroup: number
 ) {
     const keyAttr = orient === 'vertical' ? 'x' : 'y';
     zrUtil.each(nodesByBreadth, function (nodes) {
@@ -383,7 +398,7 @@ function resolveCollisions(
             node = nodes[i];
             dy = y0 - node.getLayout()[keyAttr];
             if (dy > 0) {
-                nodeX = node.getLayout()[keyAttr] + dy;
+                nodeX = node.group === 1 ? node.getLayout()[keyAttr] + dy : width * ((node.group - 1) / nodeGroup) + 60;
                 orient === 'vertical'
                     ? node.setLayout({x: nodeX}, true)
                     : node.setLayout({y: nodeX}, true);

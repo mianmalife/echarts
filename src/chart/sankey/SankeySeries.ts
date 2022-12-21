@@ -103,6 +103,8 @@ export interface SankeySeriesOption
      */
     color?: ColorString[]
 
+    nodeGroup?: number
+
     coordinateSystem?: 'view'
 
     orient?: LayoutOrient
