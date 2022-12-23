@@ -66068,8 +66068,8 @@
       ecModel.eachSeriesByType('sankey', function (seriesModel) {
         var nodeWidth = seriesModel.get('nodeWidth');
         var nodeGap = seriesModel.get('nodeGap');
-        var nodeGroup = seriesModel.get("nodeGroup") || 0;
-        var datas = seriesModel.get("data") || [];
+        var nodeGroup = seriesModel.get('nodeGroup') || 0;
+        var datas = seriesModel.get('data') || [];
         var layoutInfo = getViewRect$4(seriesModel, api);
         seriesModel.layoutInfo = layoutInfo;
         var width = layoutInfo.width;
@@ -66410,7 +66410,12 @@
           dy = y0 - node.getLayout()[keyAttr];
 
           if (dy > 0) {
-            nodeX = node.group === 1 ? node.getLayout()[keyAttr] + dy : width * ((node.group - 1) / nodeGroup) + 60;
+            if (node.group && nodeGroup) {
+              nodeX = node.group === 1 ? node.getLayout()[keyAttr] + dy : width * ((node.group - 1) / nodeGroup) + (nodeGroup <= 2 ? 260 : 60);
+            } else {
+              nodeX = node.getLayout()[keyAttr] + dy;
+            }
+
             orient === 'vertical' ? node.setLayout({
               x: nodeX
             }, true) : node.setLayout({

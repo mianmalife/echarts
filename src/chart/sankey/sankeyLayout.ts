@@ -351,7 +351,6 @@ function initializeNodeDepth(
             minKy = ky;
         }
     });
-
     zrUtil.each(nodesByBreadth, function (nodes) {
         zrUtil.each(nodes, function (node, i) {
             const nodeDy = node.getLayout().value * minKy;
@@ -398,7 +397,15 @@ function resolveCollisions(
             node = nodes[i];
             dy = y0 - node.getLayout()[keyAttr];
             if (dy > 0) {
-                nodeX = node.group === 1 ? node.getLayout()[keyAttr] + dy : width * ((node.group - 1) / nodeGroup) + 60;
+                if (node.group && nodeGroup) {
+                    const offsetX = nodeGroup <= 2 ? 260 : 60;
+                    nodeX = node.group === 1
+                    ? node.getLayout()[keyAttr] + dy
+                    : width * ((node.group - 1) / nodeGroup) + offsetX;
+                }
+ else {
+                    nodeX = node.getLayout()[keyAttr] + dy;
+                }
                 orient === 'vertical'
                     ? node.setLayout({x: nodeX}, true)
                     : node.setLayout({y: nodeX}, true);
